@@ -23,6 +23,8 @@ namespace LanguageSchool
         public MainWindow()
         {
             InitializeComponent();
+            Classes.Global.GlobalFrame = Frame;
+            Frame.Content = new Pages.Admin();
         }
     }
 }
