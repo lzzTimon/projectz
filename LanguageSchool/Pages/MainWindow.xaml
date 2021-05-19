@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LanguageSchool"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1000">
+        Title="MainWindow" Height="600" Width="1000"
+        Icon="\Resources\icn.ico">
     <Grid>
-        <Frame Name="Frame"/>
+        <Frame Name="Frame" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

@@ -9,7 +9,64 @@
       Title="Страница администратора">
 
     <Grid Background="White">
-        <ScrollViewer>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70*"></RowDefinition>
+            <RowDefinition Height="380*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel Name="ForButtons">
+            <Button Name="AddRecord" Content="Добавить новую запись" Click="AddRecord_Click"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Name="StackChange" Visibility="Collapsed">
+            <TextBlock Name="TextID" />
+
+            <TextBlock>Изменить название курса</TextBlock>
+            <TextBox Name="BoxTitle" ></TextBox>
+
+            <TextBlock>Изменить цену курса</TextBlock>
+            <TextBox Name="BoxCost" />
+
+            <TextBlock>Изменить время прохождения курса (мин)</TextBlock>
+            <TextBox Name="BoxTime" />
+
+            <TextBlock>Добавить описание (по желанию)</TextBlock>
+            <TextBox Name="BoxDescription" />
+
+            <TextBlock>Указать скидку (целое число)</TextBlock>
+            <TextBox Name="BoxDiscount" ></TextBox>
+
+            <Button Name="BtnImg" Content="Выбрать картинку" Click="BtnImg_Click"/>
+            <TextBox Name="ForPath"></TextBox>
+
+            <Button Name="BtnWrite" Content="Изменить" Click="BtnWrite_Click"/>
+            <Button Name="BtnBack" Content="Назад" Click="BtnBack_Click"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Name="StackAdd" Visibility="Collapsed">
+            <TextBlock>Введите название курса</TextBlock>
+            <TextBox Name="BoxNewHeader"></TextBox>
+            
+            <TextBlock>Введите цену курса</TextBlock>
+            <TextBox Name="BoxNewCost"></TextBox>
+            
+            <TextBlock>Введите количество часов курса (мин)</TextBlock>
+            <TextBox Name="BoxNewTime"></TextBox>
+
+            <TextBlock>Описание курса (по желанию)</TextBlock>
+            <TextBox Name="BoxNewDescription"></TextBox>
+            
+            <TextBlock>Скидка (целое число)</TextBlock>
+            <TextBox Name="BoxNewDiscount"></TextBox>
+
+            <Button Name="BtnAddImg" Content="Выбрать картинку" Click="BtnAddImg_Click"/>
+            <TextBox Name="AddPath"></TextBox>
+
+            <Button Name="BtnAdd" Content="Добавить запись" Click="BtnAdd_Click"/>
+
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" Name="SVGrid">
             <StackPanel>
                 <DataGrid Name="DGServices" AutoGenerateColumns="False" HorizontalAlignment="Center" CanUserAddRows="False">
                     <DataGrid.Columns>
@@ -27,7 +84,7 @@
                                             <TextBlock Initialized="TextBlock_Initialized_4"/>
                                             <StackPanel Orientation="Horizontal">
                                                 <Button Name="BEdit" Margin="5" Content="Редактировать" Click="BEdit_Click" Initialized="BEdit_Initialized"/>
-                                                <Button Name="BDelete" Margin="5" Content="Удалить"/>
+                                                <Button Name="BDelete" Margin="5" Content="Удалить" Initialized="BDelete_Initialized" Click="BDelete_Click"/>
                                                 <Button Name="BNew" Margin="5" Content="Новый заказ"/>
                                             </StackPanel>
                                         </StackPanel>
