@@ -13,11 +13,13 @@
             <RowDefinition Height="70*"></RowDefinition>
             <RowDefinition Height="380*"></RowDefinition>
         </Grid.RowDefinitions>
-
+         
+        <!--Место под логотип и кнопку дабавления записей-->
         <StackPanel Name="ForButtons">
             <Button Name="AddRecord" Content="Добавить новую запись" Click="AddRecord_Click"/>
         </StackPanel>
-
+        
+        <!--Панель изменений-->
         <StackPanel Grid.Row="1" Name="StackChange" Visibility="Collapsed">
             <TextBlock Name="TextID" />
 
@@ -42,7 +44,8 @@
             <Button Name="BtnWrite" Content="Изменить" Click="BtnWrite_Click"/>
             <Button Name="BtnBack" Content="Назад" Click="BtnBack_Click"/>
         </StackPanel>
-
+        
+        <!--Панель добавления-->
         <StackPanel Grid.Row="1" Name="StackAdd" Visibility="Collapsed">
             <TextBlock>Введите название курса</TextBlock>
             <TextBox Name="BoxNewHeader"></TextBox>
@@ -60,10 +63,20 @@
             <TextBox Name="BoxNewDiscount"></TextBox>
 
             <Button Name="BtnAddImg" Content="Выбрать картинку" Click="BtnAddImg_Click"/>
-            <TextBox Name="AddPath"></TextBox>
 
             <Button Name="BtnAdd" Content="Добавить запись" Click="BtnAdd_Click"/>
 
+        </StackPanel>
+        
+        <!--Панель создания новых записей в таблице ClentServices-->
+        <StackPanel Grid.Row="1" Name="StackNewNote" Visibility="Collapsed">
+            <TextBlock Name="BlockServiceName"/>
+            <TextBlock Name="BlockServiceTime"/>
+
+            <ComboBox Name="ComboBoxHuman"/>
+            <DatePicker Name="DateOfNote"/>
+            <TextBox Name="TimeOfNote" TextChanged="TimeOfNote_TextChanged"></TextBox>
+            <Button Name="BtnNote" Content="Записать" Click="BtnNote_Click"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" Name="SVGrid">
@@ -85,7 +98,7 @@
                                             <StackPanel Orientation="Horizontal">
                                                 <Button Name="BEdit" Margin="5" Content="Редактировать" Click="BEdit_Click" Initialized="BEdit_Initialized"/>
                                                 <Button Name="BDelete" Margin="5" Content="Удалить" Initialized="BDelete_Initialized" Click="BDelete_Click"/>
-                                                <Button Name="BNew" Margin="5" Content="Новый заказ"/>
+                                                <Button Name="BNew" Margin="5" Content="Новый заказ" Initialized="BNew_Initialized" Click="BNew_Click"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </StackPanel>

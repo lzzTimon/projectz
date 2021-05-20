@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 using System.Windows.Forms;
 using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.MessageBox;
-
+using System.Text.RegularExpressions;
 
 namespace LanguageSchool.Pages
 {
@@ -27,10 +27,14 @@ namespace LanguageSchool.Pages
     public partial class Admin : Page
     {
         List<Service> ServiceList = Classes.Base.Ent.Service.ToList();
+        List<ClientService> ClentServiceList = Classes.Base.Ent.ClientService.ToList();
         public Admin()
         {
             InitializeComponent();
             DGServices.ItemsSource = ServiceList;
+            ComboBoxHuman.ItemsSource = Classes.Base.Ent.Client.ToList();
+            ComboBoxHuman.SelectedValuePath = "ID";
+            ComboBoxHuman.DisplayMemberPath = "Human";
         }
 
         int i = -1;
@@ -76,6 +80,8 @@ namespace LanguageSchool.Pages
             SVGrid.Visibility = Visibility.Collapsed;
             StackChange.Visibility = Visibility.Visible;
             StackAdd.Visibility = Visibility.Collapsed;
+            StackNewNote.Visibility = Visibility.Collapsed;
+            ForButtons.Visibility = Visibility.Collapsed;
 
             Button BtnEdit = (Button)sender;
             int ind = Convert.ToInt32(BtnEdit.Uid);
@@ -207,6 +213,11 @@ namespace LanguageSchool.Pages
             }
         }
 
+        /// <summary>
+        /// Изменение записей 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnWrite_Click(object sender, RoutedEventArgs e)
         {
             double discount = Convert.ToDouble(BoxDiscount.Text)/100;
@@ -226,13 +237,20 @@ namespace LanguageSchool.Pages
             }
         }
 
+        /// <summary>
+        /// Добавление записей 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddRecord_Click(object sender, RoutedEventArgs e)
         {
             StackAdd.Visibility = Visibility.Visible;
             StackChange.Visibility = Visibility.Collapsed;
             SVGrid.Visibility = Visibility.Collapsed;
+            StackNewNote.Visibility = Visibility.Collapsed;
         }
 
+        public string AddPathPhoto;
         private void BtnAddImg_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog OFD = new System.Windows.Forms.OpenFileDialog();
@@ -242,7 +260,7 @@ namespace LanguageSchool.Pages
             {
                 int c = Path.IndexOf('У');
                 string New = Path.Substring(c);
-                ForPath.Text = New.ToString();
+                AddPathPhoto = New.ToString();
             }
         }
 
@@ -265,7 +283,7 @@ namespace LanguageSchool.Pages
                 DialogResult DR = (DialogResult)MessageBox.Show("Следующая запись будет добавлена. Добавить запись?", "Внимание", (MessageBoxButton)MessageBoxButtons.YesNo);
                 if (DR == DialogResult.Yes)
                 {
-                    Service obj = new Service() { Title = BoxNewHeader.Text, Cost = Convert.ToInt32(BoxNewCost.Text), DurationInSeconds = time, Description = BoxNewDescription.Text, Discount = discount, MainImagePath = AddPath.Text };
+                    Service obj = new Service() { Title = BoxNewHeader.Text, Cost = Convert.ToInt32(BoxNewCost.Text), DurationInSeconds = time, Description = BoxNewDescription.Text, Discount = discount, MainImagePath = AddPathPhoto};
                     Classes.Base.Ent.Service.Add(obj);
                     Classes.Base.Ent.SaveChanges();
                     MessageBox.Show("Запись добавлена");
@@ -275,6 +293,95 @@ namespace LanguageSchool.Pages
                     MessageBox.Show("Запись не была добавлена");
                 }
 
+            }
+
+            Classes.Global.GlobalFrame.Navigate(new Admin());
+        }
+
+
+        /// <summary>
+        /// Добавление новой записи на программу обучения 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BNew_Initialized(object sender, EventArgs e)
+        {
+            Button BtnNote = (Button)sender;
+            if (BtnNote != null)
+            {
+                BtnNote.Uid = Convert.ToString(i);
+            }
+        }
+
+        private void BNew_Click(object sender, RoutedEventArgs e)
+        {
+            StackAdd.Visibility = Visibility.Collapsed;
+            StackChange.Visibility = Visibility.Collapsed;
+            SVGrid.Visibility = Visibility.Collapsed;
+            ForButtons.Visibility = Visibility.Collapsed;
+            StackNewNote.Visibility = Visibility.Visible;
+
+            Button BtnEdit = (Button)sender;
+            int ind = Convert.ToInt32(BtnEdit.Uid);
+            Service S = ServiceList[ind];
+
+            BlockServiceName.Text = "Название курса: " + Convert.ToString(S.Title);
+            BlockServiceTime.Text = "Время занятий: " + Convert.ToString((S.DurationInSeconds) / 60) + "мин";
+        }
+
+        DateTime DT;
+        private void TimeOfNote_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                Regex r1 = new Regex("[0-1][0-9]:[0-5][0-9]");
+                Regex r2 = new Regex("2[0-3]:[0-5][0-9]");
+                string s = "";
+                if ((r1.IsMatch(TimeOfNote.Text) || r2.IsMatch(TimeOfNote.Text)) && TimeOfNote.Text.Length == 5)
+                {
+                    MessageBox.Show(TimeOfNote.Text);
+                    TimeSpan TS = TimeSpan.Parse(TimeOfNote.Text);
+                    DT = Convert.ToDateTime(DateOfNote.SelectedDate);
+                    DT = DT.Add(TS);
+                    if (DT > DateTime.Now)
+                    {
+                        MessageBox.Show(DT + "");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Запись не может быть в прошедешм времени");
+                    }
+                }
+                else
+                {
+                    if (TimeOfNote.Text.Length >= 5)
+                    {
+                        MessageBox.Show("Время указано неверно");
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Ошибка");
+            }
+        }
+
+        private void BtnNote_Click(object sender, RoutedEventArgs e)
+        {
+            Service S = ServiceList[i];
+            int indexCombo = (int)ComboBoxHuman.SelectedValue;
+
+            DialogResult DR = (DialogResult)MessageBox.Show("Следующая запись будет добавлена. Добавить запись?", "Внимание", (MessageBoxButton)MessageBoxButtons.YesNo);
+            if (DR == DialogResult.Yes)
+            {
+                ClientService obj = new ClientService() {ClientID = indexCombo, ServiceID = S.ID, StartTime = DT };
+                Classes.Base.Ent.ClientService.Add(obj);
+                Classes.Base.Ent.SaveChanges();
+                MessageBox.Show("Изменения сохранены");
+            }
+            else if (DR == DialogResult.No)
+            {
+                MessageBox.Show("Изменения не были сохранены");
             }
         }
     }
