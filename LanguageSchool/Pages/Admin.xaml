@@ -6,7 +6,9 @@
       xmlns:local="clr-namespace:LanguageSchool.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Страница администратора">
+      Title="Страница администратора"
+      FontFamily="Comic Sans MS"
+      FontSize="14">
 
     <Grid Background="White">
         <Grid.RowDefinitions>
@@ -15,10 +17,20 @@
         </Grid.RowDefinitions>
          
         <!--Место под логотип и кнопку дабавления записей-->
-        <StackPanel Name="ForButtons">
-            <Button Name="AddRecord" Content="Добавить новую запись" Click="AddRecord_Click"/>
-        </StackPanel>
+        <Grid Grid.Row="0" Name="ForButtons">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <Image Grid.Column="0" Name="Logo" HorizontalAlignment="Left" Margin="15" VerticalAlignment="Top"  Width="40" Height="40"/>
+            <Button Grid.Column="1" Style="{StaticResource Buttons}" x:Name="AddRecord" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Добавить новую запись" Click="AddRecord_Click"/>
+            
+        </Grid>
         
+        
+
         <!--Панель изменений-->
         <StackPanel Grid.Row="1" Name="StackChange" Visibility="Collapsed">
             <TextBlock Name="TextID" />
@@ -81,24 +93,24 @@
 
         <ScrollViewer Grid.Row="1" Name="SVGrid">
             <StackPanel>
-                <DataGrid Name="DGServices" AutoGenerateColumns="False" HorizontalAlignment="Center" CanUserAddRows="False">
+                <DataGrid Name="DGServices" AutoGenerateColumns="False" HorizontalAlignment="Center" CanUserAddRows="False" BorderBrush="Transparent">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Initialized="StackPanel_Initialized" Orientation="Horizontal">
-                                        <MediaElement Width="100" Height="100" HorizontalAlignment="Left" VerticalAlignment="Center" Initialized="MediaElement_Initialized"></MediaElement>
-                                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Width="300">
-                                            <TextBlock Initialized="TextBlock_Initialized"/>
+                                        <MediaElement Width="120" Height="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10" Initialized="MediaElement_Initialized"></MediaElement>
+                                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Width="600" Margin="5">
+                                            <TextBlock Initialized="TextBlock_Initialized" Style="{StaticResource Header}"/>
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Initialized="TextBlock_Initialized_2" TextDecorations="Strikethrough"></TextBlock>
                                                 <TextBlock Initialized="TextBlock_Initialized_1"/>
                                             </StackPanel>
                                             <TextBlock Initialized="TextBlock_Initialized_4"/>
                                             <StackPanel Orientation="Horizontal">
-                                                <Button Name="BEdit" Margin="5" Content="Редактировать" Click="BEdit_Click" Initialized="BEdit_Initialized"/>
-                                                <Button Name="BDelete" Margin="5" Content="Удалить" Initialized="BDelete_Initialized" Click="BDelete_Click"/>
-                                                <Button Name="BNew" Margin="5" Content="Новый заказ" Initialized="BNew_Initialized" Click="BNew_Click"/>
+                                                <Button Style="{StaticResource FunctionButtons}" Name="BEdit" Margin="5" Content="Редактировать" Click="BEdit_Click" Initialized="BEdit_Initialized"/>
+                                                <Button Style="{StaticResource FunctionButtons}" Name="BDelete" Margin="5" Content="Удалить" Initialized="BDelete_Initialized" Click="BDelete_Click"/>
+                                                <Button Style="{StaticResource FunctionButtons}" Name="BNew" Margin="5" Content="Новый заказ" Initialized="BNew_Initialized" Click="BNew_Click"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </StackPanel>

@@ -20,11 +20,14 @@ namespace LanguageSchool
     /// </summary>
     public partial class MainWindow : Window
     {
+        string Path;
         public MainWindow()
         {
             InitializeComponent();
             Classes.Global.GlobalFrame = Frame;
             Frame.Content = new Pages.Admin();
+
+            
         }
     }
 }

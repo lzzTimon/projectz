@@ -28,9 +28,20 @@ namespace LanguageSchool.Pages
     {
         List<Service> ServiceList = Classes.Base.Ent.Service.ToList();
         List<ClientService> ClentServiceList = Classes.Base.Ent.ClientService.ToList();
+
+        string Path;
         public Admin()
         {
             InitializeComponent();
+
+            BitmapImage BMI = new BitmapImage();
+            BMI.BeginInit();
+            Path = @"\Resources\school_logo.png";
+            BMI.UriSource = new Uri(Path, UriKind.RelativeOrAbsolute);
+            BMI.EndInit();
+            Logo.Source = BMI;
+            Logo.Stretch = Stretch.UniformToFill;
+
             DGServices.ItemsSource = ServiceList;
             ComboBoxHuman.ItemsSource = Classes.Base.Ent.Client.ToList();
             ComboBoxHuman.SelectedValuePath = "ID";
@@ -339,7 +350,7 @@ namespace LanguageSchool.Pages
                 string s = "";
                 if ((r1.IsMatch(TimeOfNote.Text) || r2.IsMatch(TimeOfNote.Text)) && TimeOfNote.Text.Length == 5)
                 {
-                    MessageBox.Show(TimeOfNote.Text);
+                    //MessageBox.Show(TimeOfNote.Text);
                     TimeSpan TS = TimeSpan.Parse(TimeOfNote.Text);
                     DT = Convert.ToDateTime(DateOfNote.SelectedDate);
                     DT = DT.Add(TS);
@@ -350,6 +361,7 @@ namespace LanguageSchool.Pages
                     else
                     {
                         MessageBox.Show("Запись не может быть в прошедешм времени");
+                        BtnNote.IsEnabled = false;
                     }
                 }
                 else
@@ -357,6 +369,7 @@ namespace LanguageSchool.Pages
                     if (TimeOfNote.Text.Length >= 5)
                     {
                         MessageBox.Show("Время указано неверно");
+                        BtnNote.IsEnabled = false;
                     }
                 }
             }
