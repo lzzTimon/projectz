@@ -26,7 +26,8 @@ namespace LanguageSchool.Pages
     /// </summary>
     public partial class Admin : Page
     {
-        List<Service> ServiceList = Classes.Base.Ent.Service.ToList();
+        List<Service> ServiceList1 = Classes.Base.Ent.Service.ToList();
+        List<Service> ServiceList = new List<Service>(); //отрисовка
         List<ClientService> ClentServiceList = Classes.Base.Ent.ClientService.ToList();
 
         string Path;
@@ -41,6 +42,8 @@ namespace LanguageSchool.Pages
             BMI.EndInit();
             Logo.Source = BMI;
             Logo.Stretch = Stretch.UniformToFill;
+
+            ServiceList = ServiceList1;
 
             DGServices.ItemsSource = ServiceList;
             ComboBoxHuman.ItemsSource = Classes.Base.Ent.Client.ToList();
@@ -82,7 +85,7 @@ namespace LanguageSchool.Pages
         }
 
         /// <summary>
-        /// Вывод данных из БД в textbox, при нажатии кнопки изменить
+        /// Вывод данных из БД в textbox, при нажатии кнопки Изменить
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -172,7 +175,7 @@ namespace LanguageSchool.Pages
         }
 
         /// <summary>
-        /// Удаление записей 
+        /// Удаление записей из приложения
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -191,7 +194,7 @@ namespace LanguageSchool.Pages
             int ind = Convert.ToInt32(BtnDel.Uid);
             Service S = ServiceList[ind];
 
-            DialogResult DR = (DialogResult)MessageBox.Show("Внимание!", "Следующая запись будет удалена. Удалить запись?", (MessageBoxButton)MessageBoxButtons.YesNo);
+            DialogResult DR = (DialogResult)MessageBox.Show("Следующая запись будет удалена. Удалить запись?", "Внимание", (MessageBoxButton)MessageBoxButtons.YesNo);
             if (DR == DialogResult.Yes)
             {
                 Classes.Base.Ent.Service.Remove(S);
@@ -211,6 +214,12 @@ namespace LanguageSchool.Pages
             Classes.Global.GlobalFrame.Navigate(new Admin());
         }
 
+
+        /// <summary>
+        /// Метод для загрузки изображений 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnImg_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog OFD = new System.Windows.Forms.OpenFileDialog();
@@ -231,20 +240,29 @@ namespace LanguageSchool.Pages
         /// <param name="e"></param>
         private void BtnWrite_Click(object sender, RoutedEventArgs e)
         {
-            double discount = Convert.ToDouble(BoxDiscount.Text)/100;
-            int time = Convert.ToInt32(BoxTime.Text)*60;
+            
 
-            DialogResult DR = (DialogResult)MessageBox.Show("Следующая запись будет изменена. Изменить запись?", "Внимание",  (MessageBoxButton)MessageBoxButtons.YesNo);
-            if (DR == DialogResult.Yes)
+            try
             {
-                Service obj = new Service() { ID = Convert.ToInt32(TextID.Text), Title = BoxTitle.Text, Cost = Convert.ToInt32(BoxCost.Text), DurationInSeconds = time, Description = BoxDescription.Text, Discount = discount, MainImagePath = ForPath.Text };
-                Classes.Base.Ent.Service.AddOrUpdate(obj);
-                Classes.Base.Ent.SaveChanges();
-                MessageBox.Show("Изменения сохранены");
+                double discount = Convert.ToDouble(BoxDiscount.Text) / 100;
+                int time = Convert.ToInt32(BoxTime.Text) * 60;
+
+                DialogResult DR = (DialogResult)MessageBox.Show("Следующая запись будет изменена. Изменить запись?", "Внимание", (MessageBoxButton)MessageBoxButtons.YesNo);
+                if (DR == DialogResult.Yes)
+                {
+                    Service obj = new Service() { ID = Convert.ToInt32(TextID.Text), Title = BoxTitle.Text, Cost = Convert.ToInt32(BoxCost.Text), DurationInSeconds = time, Description = BoxDescription.Text, Discount = discount, MainImagePath = ForPath.Text };
+                    Classes.Base.Ent.Service.AddOrUpdate(obj);
+                    Classes.Base.Ent.SaveChanges();
+                    MessageBox.Show("Изменения сохранены");
+                }
+                else if (DR == DialogResult.No)
+                {
+                    MessageBox.Show("Изменения не были сохранены");
+                }
             }
-            else if (DR == DialogResult.No)
+            catch
             {
-                MessageBox.Show("Изменения не были сохранены");
+                MessageBox.Show("Ошибка ввода");
             }
         }
 
@@ -259,6 +277,7 @@ namespace LanguageSchool.Pages
             StackChange.Visibility = Visibility.Collapsed;
             SVGrid.Visibility = Visibility.Collapsed;
             StackNewNote.Visibility = Visibility.Collapsed;
+            ForButtons.Visibility = Visibility.Collapsed;
         }
 
         public string AddPathPhoto;
@@ -278,35 +297,41 @@ namespace LanguageSchool.Pages
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             Service S = ServiceList[i];
-            if (S.Title == BoxNewHeader.Text)
+            try
             {
-                MessageBox.Show("Данное имя уже существует в системе");
-            }
-            if (Convert.ToInt32(BoxNewTime.Text) > 14400 || Convert.ToInt32(BoxNewTime.Text) < 0)
-            {
-                MessageBox.Show("Время не может привышать 4 часов или быть отрицательным");
-            }
-            else if (Convert.ToInt32(BoxNewTime.Text) < 14400 || Convert.ToInt32(BoxNewTime.Text) > 0)
-            {
-                double discount = Convert.ToDouble(BoxNewDiscount.Text) / 100;
-                int time = Convert.ToInt32(BoxNewTime.Text) * 60;
-
-                DialogResult DR = (DialogResult)MessageBox.Show("Следующая запись будет добавлена. Добавить запись?", "Внимание", (MessageBoxButton)MessageBoxButtons.YesNo);
-                if (DR == DialogResult.Yes)
+                if (S.Title == BoxNewHeader.Text)
                 {
-                    Service obj = new Service() { Title = BoxNewHeader.Text, Cost = Convert.ToInt32(BoxNewCost.Text), DurationInSeconds = time, Description = BoxNewDescription.Text, Discount = discount, MainImagePath = AddPathPhoto};
-                    Classes.Base.Ent.Service.Add(obj);
-                    Classes.Base.Ent.SaveChanges();
-                    MessageBox.Show("Запись добавлена");
+                    MessageBox.Show("Данное имя уже существует в системе");
                 }
-                else if (DR == DialogResult.No)
+                if (Convert.ToInt32(BoxNewTime.Text) > 14400 || Convert.ToInt32(BoxNewTime.Text) < 0)
                 {
-                    MessageBox.Show("Запись не была добавлена");
+                    MessageBox.Show("Время не может привышать 4 часов или быть отрицательным");
                 }
+                else if (Convert.ToInt32(BoxNewTime.Text) < 14400 || Convert.ToInt32(BoxNewTime.Text) > 0)
+                {
+                    double discount = Convert.ToDouble(BoxNewDiscount.Text) / 100;
+                    int time = Convert.ToInt32(BoxNewTime.Text) * 60;
 
+                    DialogResult DR = (DialogResult)MessageBox.Show("Следующая запись будет добавлена. Добавить запись?", "Внимание", (MessageBoxButton)MessageBoxButtons.YesNo);
+                    if (DR == DialogResult.Yes)
+                    {
+                        Service obj = new Service() { Title = BoxNewHeader.Text, Cost = Convert.ToInt32(BoxNewCost.Text), DurationInSeconds = time, Description = BoxNewDescription.Text, Discount = discount, MainImagePath = AddPathPhoto };
+                        Classes.Base.Ent.Service.Add(obj);
+                        Classes.Base.Ent.SaveChanges();
+                        MessageBox.Show("Запись добавлена");
+                    }
+                    else if (DR == DialogResult.No)
+                    {
+                        MessageBox.Show("Запись не была добавлена");
+                    }
+
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Ошибка ввода");
             }
 
-            Classes.Global.GlobalFrame.Navigate(new Admin());
         }
 
 
@@ -375,7 +400,7 @@ namespace LanguageSchool.Pages
             }
             catch
             {
-                MessageBox.Show("Ошибка");
+                MessageBox.Show("Ошибка ввода");
             }
         }
 
@@ -384,18 +409,148 @@ namespace LanguageSchool.Pages
             Service S = ServiceList[i];
             int indexCombo = (int)ComboBoxHuman.SelectedValue;
 
-            DialogResult DR = (DialogResult)MessageBox.Show("Следующая запись будет добавлена. Добавить запись?", "Внимание", (MessageBoxButton)MessageBoxButtons.YesNo);
-            if (DR == DialogResult.Yes)
+            try
             {
-                ClientService obj = new ClientService() {ClientID = indexCombo, ServiceID = S.ID, StartTime = DT };
-                Classes.Base.Ent.ClientService.Add(obj);
-                Classes.Base.Ent.SaveChanges();
-                MessageBox.Show("Изменения сохранены");
+                DialogResult DR = (DialogResult)MessageBox.Show("Следующая запись будет добавлена. Добавить запись?", "Внимание", (MessageBoxButton)MessageBoxButtons.YesNo);
+                if (DR == DialogResult.Yes)
+                {
+                    ClientService obj = new ClientService() { ClientID = indexCombo, ServiceID = S.ID, StartTime = DT };
+                    Classes.Base.Ent.ClientService.Add(obj);
+                    Classes.Base.Ent.SaveChanges();
+                    MessageBox.Show("Изменения сохранены");
+                }
+                else if (DR == DialogResult.No)
+                {
+                    MessageBox.Show("Изменения не были сохранены");
+                }
             }
-            else if (DR == DialogResult.No)
+            catch
             {
-                MessageBox.Show("Изменения не были сохранены");
+                MessageBox.Show("Ошибка ввода");
             }
+        }
+
+
+        /// <summary>
+        /// Сортировака
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+
+        private void BtnSortUp_Click(object sender, RoutedEventArgs e)
+        {
+            i = -1;
+            ServiceList.Sort((x,y) => x.Cost.CompareTo(y.Cost));
+            DGServices.Items.Refresh();
+        }
+
+        private void BtnSortDown_Click(object sender, RoutedEventArgs e)
+        {
+            i = -1;
+            ServiceList.Sort((x, y) => x.Cost.CompareTo(y.Cost));
+            ServiceList.Reverse();
+            DGServices.Items.Refresh();
+        }
+
+
+       
+
+        List<Service> ServiceListFilter = new List<Service>();
+
+        /// <summary>
+        /// фильтрация по скидке
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ComboDiscout_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            i = -1;
+            switch (ComboDiscout.SelectedIndex)
+            {
+                case 0:
+                    ServiceListFilter = ServiceList1.Where(x => x.Discount <= .05).ToList();
+                    ServiceList = ServiceListFilter;
+                    DGServices.ItemsSource = ServiceList;
+                    break;
+                case 1:
+                    ServiceListFilter = ServiceList1.Where(x => (x.Discount >= .05) && (x.Discount < .15)).ToList();
+                    ServiceList = ServiceListFilter;
+                    DGServices.ItemsSource = ServiceList;
+                    break;
+                case 2:
+                    ServiceListFilter = ServiceList1.Where(x => (x.Discount >= .15) && (x.Discount < .3)).ToList();
+                    ServiceList = ServiceListFilter;
+                    DGServices.ItemsSource = ServiceList;
+                    break;
+                case 3:
+                    ServiceListFilter = ServiceList1.Where(x => (x.Discount >= .3) && (x.Discount < .7)).ToList();
+                    ServiceList = ServiceListFilter;
+                    DGServices.ItemsSource = ServiceList;
+                    break;
+                case 4:
+                    ServiceListFilter = ServiceList1.Where(x => (x.Discount >= .7) && (x.Discount < 1)).ToList();
+                    ServiceList = ServiceListFilter;
+                    DGServices.ItemsSource = ServiceList;
+                    break;
+                case 5:
+                    ServiceListFilter = ServiceList1.Where(x => x.Discount <= 1).ToList();
+                    ServiceList = ServiceListFilter;
+                    DGServices.ItemsSource = ServiceList;
+                    break;
+            }
+            AllNotes.Text = Convert.ToString("Общее количество записей: " + ServiceList1.Count);
+            FilterNotes.Text = Convert.ToString("Отфильтрованные записи: " + ServiceList.Count);
+        }
+
+
+
+        /// <summary>
+        /// Поиск по названию
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BoxForSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            i = -1;
+            if (BoxForSearch.Text != "")
+            {
+                List<Service> ServiceListSerach = new List<Service>();
+                ServiceListSerach = ServiceList.Where(x => x.Title.Contains(BoxForSearch.Text)).ToList();
+                ServiceList = ServiceListSerach;
+                DGServices.ItemsSource = ServiceList;
+
+                AllNotes.Text = Convert.ToString("Общее количество записей: " + ServiceList1.Count);
+                FilterNotes.Text = Convert.ToString("Отфильтрованные записи: " + ServiceList.Count);
+            }
+            else
+            {
+                if (ServiceListFilter.Count == 0)
+                {
+                    ServiceList = ServiceList1;
+                    DGServices.ItemsSource = ServiceList;
+                }
+                else
+                {
+                    ServiceList = ServiceListFilter;
+                    DGServices.ItemsSource = ServiceList;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// вторая кнопка назад
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnBack2_Click(object sender, RoutedEventArgs e)
+        {
+            Classes.Global.GlobalFrame.Navigate(new Admin());
+        }
+
+        private void BtnBack3_Click(object sender, RoutedEventArgs e)
+        {
+            Classes.Global.GlobalFrame.Navigate(new Admin());
         }
     }
 }

@@ -5,90 +5,144 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:LanguageSchool.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="800" d:DesignWidth="1100"
       Title="Страница администратора"
       FontFamily="Comic Sans MS"
       FontSize="14">
 
     <Grid Background="White">
         <Grid.RowDefinitions>
-            <RowDefinition Height="70*"></RowDefinition>
-            <RowDefinition Height="380*"></RowDefinition>
+            <RowDefinition Height="21*"></RowDefinition>
+            <RowDefinition Height="79*"></RowDefinition>
         </Grid.RowDefinitions>
-         
+
         <!--Место под логотип и кнопку дабавления записей-->
         <Grid Grid.Row="0" Name="ForButtons">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            
-            <Image Grid.Column="0" Name="Logo" HorizontalAlignment="Left" Margin="15" VerticalAlignment="Top"  Width="40" Height="40"/>
-            <Button Grid.Column="1" Style="{StaticResource Buttons}" x:Name="AddRecord" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Добавить новую запись" Click="AddRecord_Click"/>
-            
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Image Grid.Column="3" Grid.RowSpan="4" Name="Logo" HorizontalAlignment="Right" Margin="15" VerticalAlignment="Top"  Width="50" Height="50"/>
+            <Button Grid.ColumnSpan="4" Grid.Row="0" Style="{StaticResource Buttons}" Name="AddRecord" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Добавить новую запись" Click="AddRecord_Click"/>
+            <Button Grid.Column="1" Grid.Row="1" Style="{StaticResource Buttons}" Name="BtnSortUp" Content="Сортировать по возрасстанию" Click="BtnSortUp_Click"/>
+            <Button Grid.Column="2" Grid.Row="1" Style="{StaticResource Buttons}" Name="BtnSortDown" Content="Сортировать по убыванию" Click="BtnSortDown_Click"/>
+
+            <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource FotTextBlock2}" VerticalAlignment="Center">Скидка:</TextBlock>
+            <TextBox 
+                Grid.ColumnSpan="4" 
+                Grid.Row="3" Name="BoxForSearch" 
+                Width="350" Height="30" 
+                HorizontalContentAlignment="Center" 
+                VerticalContentAlignment="Center" 
+                TextChanged="BoxForSearch_TextChanged">
+
+            </TextBox>
+
+            <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource FotTextBlock2}" VerticalAlignment="Center">Поиск:</TextBlock>
+            <ComboBox 
+                Grid.ColumnSpan="4" 
+                Grid.Row="2" 
+                Name="ComboDiscout" 
+                Width="350" 
+                Height="30" 
+                HorizontalContentAlignment="Center" 
+                VerticalContentAlignment="Center"
+                SelectionChanged="ComboDiscout_SelectionChanged">
+
+                <ComboBoxItem>От 0% до 5%</ComboBoxItem>
+                <ComboBoxItem>От 5% до 15%</ComboBoxItem>
+                <ComboBoxItem>От 15% до 30%</ComboBoxItem>
+                <ComboBoxItem>От 30% до 70%</ComboBoxItem>
+                <ComboBoxItem>От 70% до 100%</ComboBoxItem>
+                <ComboBoxItem>Все</ComboBoxItem>
+            </ComboBox>
         </Grid>
-        
-        
+
+
 
         <!--Панель изменений-->
         <StackPanel Grid.Row="1" Name="StackChange" Visibility="Collapsed">
-            <TextBlock Name="TextID" />
+            <TextBlock Style="{StaticResource FotTextBlock}" Name="TextID" />
 
-            <TextBlock>Изменить название курса</TextBlock>
-            <TextBox Name="BoxTitle" ></TextBox>
+            <TextBlock Style="{StaticResource FotTextBlock}">Изменить название курса</TextBlock>
+            <TextBox Style="{StaticResource ForTextBox}" Name="BoxTitle" ></TextBox>
 
-            <TextBlock>Изменить цену курса</TextBlock>
-            <TextBox Name="BoxCost" />
+            <TextBlock Style="{StaticResource FotTextBlock}">Изменить цену курса</TextBlock>
+            <TextBox Style="{StaticResource ForTextBox}" Name="BoxCost" />
 
-            <TextBlock>Изменить время прохождения курса (мин)</TextBlock>
-            <TextBox Name="BoxTime" />
+            <TextBlock Style="{StaticResource FotTextBlock}">Изменить время прохождения курса (мин)</TextBlock>
+            <TextBox Style="{StaticResource ForTextBox}" Name="BoxTime" />
 
-            <TextBlock>Добавить описание (по желанию)</TextBlock>
-            <TextBox Name="BoxDescription" />
+            <TextBlock Style="{StaticResource FotTextBlock}">Добавить описание (по желанию)</TextBlock>
+            <TextBox Style="{StaticResource ForTextBox}" Name="BoxDescription" />
 
-            <TextBlock>Указать скидку (целое число)</TextBlock>
-            <TextBox Name="BoxDiscount" ></TextBox>
+            <TextBlock Style="{StaticResource FotTextBlock}">Указать скидку (целое число)</TextBlock>
+            <TextBox Style="{StaticResource ForTextBox}" Name="BoxDiscount" ></TextBox>
 
-            <Button Name="BtnImg" Content="Выбрать картинку" Click="BtnImg_Click"/>
-            <TextBox Name="ForPath"></TextBox>
+            <Button Style="{StaticResource Buttons}" Name="BtnImg" Content="Выбрать картинку" Click="BtnImg_Click"/>
+            <TextBox Style="{StaticResource ForTextBox}" Name="ForPath"></TextBox>
 
-            <Button Name="BtnWrite" Content="Изменить" Click="BtnWrite_Click"/>
-            <Button Name="BtnBack" Content="Назад" Click="BtnBack_Click"/>
+            <Button Style="{StaticResource Buttons}" Name="BtnWrite" Content="Изменить" Click="BtnWrite_Click"/>
+            <Button Style="{StaticResource Buttons}" Name="BtnBack" Content="Назад" Click="BtnBack_Click"/>
         </StackPanel>
-        
+
         <!--Панель добавления-->
         <StackPanel Grid.Row="1" Name="StackAdd" Visibility="Collapsed">
-            <TextBlock>Введите название курса</TextBlock>
-            <TextBox Name="BoxNewHeader"></TextBox>
-            
-            <TextBlock>Введите цену курса</TextBlock>
-            <TextBox Name="BoxNewCost"></TextBox>
-            
-            <TextBlock>Введите количество часов курса (мин)</TextBlock>
-            <TextBox Name="BoxNewTime"></TextBox>
+            <TextBlock Style="{StaticResource FotTextBlock}">Введите название курса</TextBlock>
+            <TextBox Style="{StaticResource ForTextBox}" Name="BoxNewHeader"></TextBox>
 
-            <TextBlock>Описание курса (по желанию)</TextBlock>
-            <TextBox Name="BoxNewDescription"></TextBox>
-            
-            <TextBlock>Скидка (целое число)</TextBlock>
-            <TextBox Name="BoxNewDiscount"></TextBox>
+            <TextBlock Style="{StaticResource FotTextBlock}">Введите цену курса</TextBlock>
+            <TextBox Style="{StaticResource ForTextBox}" Name="BoxNewCost"></TextBox>
 
-            <Button Name="BtnAddImg" Content="Выбрать картинку" Click="BtnAddImg_Click"/>
+            <TextBlock Style="{StaticResource FotTextBlock}">Введите количество часов курса (мин)</TextBlock>
+            <TextBox Style="{StaticResource ForTextBox}" Name="BoxNewTime"></TextBox>
 
-            <Button Name="BtnAdd" Content="Добавить запись" Click="BtnAdd_Click"/>
+            <TextBlock Style="{StaticResource FotTextBlock}">Описание курса (по желанию)</TextBlock>
+            <TextBox Style="{StaticResource ForTextBox}" Name="BoxNewDescription"></TextBox>
+
+            <TextBlock Style="{StaticResource FotTextBlock}">Скидка (целое число)</TextBlock>
+            <TextBox Style="{StaticResource ForTextBox}" Name="BoxNewDiscount"></TextBox>
+
+            <Button Style="{StaticResource Buttons}" Name="BtnAddImg" Content="Выбрать картинку" Click="BtnAddImg_Click"/>
+            <Button Style="{StaticResource Buttons}" Name="BtnAdd" Content="Добавить запись" Click="BtnAdd_Click"/>
+            <Button Style="{StaticResource Buttons}" Name="BtnBack2" Content="Назад" Click="BtnBack2_Click"/>
 
         </StackPanel>
-        
+
         <!--Панель создания новых записей в таблице ClentServices-->
         <StackPanel Grid.Row="1" Name="StackNewNote" Visibility="Collapsed">
-            <TextBlock Name="BlockServiceName"/>
-            <TextBlock Name="BlockServiceTime"/>
+            <TextBlock Name="BlockServiceName" Style="{StaticResource FotTextBlockBig}"/>
+            <TextBlock Name="BlockServiceTime" Style="{StaticResource FotTextBlockBig}"/>
 
-            <ComboBox Name="ComboBoxHuman"/>
-            <DatePicker Name="DateOfNote"/>
-            <TextBox Name="TimeOfNote" TextChanged="TimeOfNote_TextChanged"></TextBox>
-            <Button Name="BtnNote" Content="Записать" Click="BtnNote_Click"/>
+            <TextBlock Style="{StaticResource FotTextBlock}">Выберете клиента для записи</TextBlock>
+            <ComboBox Name="ComboBoxHuman"
+                Width="350" 
+                Height="30" 
+                HorizontalContentAlignment="Center" 
+                VerticalContentAlignment="Center"
+                Margin="5"/>
+
+            <TextBlock Style="{StaticResource FotTextBlock}">Выберете день записи</TextBlock>
+            <DatePicker Name="DateOfNote"
+                Width="350" 
+                Height="30" 
+                HorizontalContentAlignment="Center" 
+                VerticalContentAlignment="Center" 
+                Margin="5"/>
+
+            <TextBlock Style="{StaticResource FotTextBlock}">Введите время урока</TextBlock>
+            <TextBox Style="{StaticResource ForTextBox}" Name="TimeOfNote" TextChanged="TimeOfNote_TextChanged"></TextBox>
+            <Button Style="{StaticResource Buttons}" Name="BtnNote" Content="Записать" Click="BtnNote_Click"/>
+            <Button Style="{StaticResource Buttons}" Name="BtnBack3" Content="Назад" Click="BtnBack3_Click"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" Name="SVGrid">
@@ -100,7 +154,7 @@
                                 <DataTemplate>
                                     <StackPanel Initialized="StackPanel_Initialized" Orientation="Horizontal">
                                         <MediaElement Width="120" Height="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10" Initialized="MediaElement_Initialized"></MediaElement>
-                                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Width="600" Margin="5">
+                                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Width="700" Margin="5">
                                             <TextBlock Initialized="TextBlock_Initialized" Style="{StaticResource Header}"/>
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock Initialized="TextBlock_Initialized_2" TextDecorations="Strikethrough"></TextBlock>
@@ -119,6 +173,8 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
+                <TextBlock Name="FilterNotes" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Name="AllNotes" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
             </StackPanel>
         </ScrollViewer>
     </Grid>
