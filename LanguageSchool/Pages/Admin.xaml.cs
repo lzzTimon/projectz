@@ -244,21 +244,29 @@ namespace LanguageSchool.Pages
 
             try
             {
-                double discount = Convert.ToDouble(BoxDiscount.Text) / 100;
-                int time = Convert.ToInt32(BoxTime.Text) * 60;
+                if (Convert.ToInt32(BoxTime.Text) > 240 || Convert.ToInt32(BoxTime.Text) < 0)
+                {
+                    MessageBox.Show("Время не может быть отрицательным или привышать 4 часа");
+                }
+                else if(Convert.ToInt32(BoxTime.Text) < 240 && Convert.ToInt32(BoxTime.Text) > 0)
+                {
+                    double discount = Convert.ToDouble(BoxDiscount.Text) / 100;
+                    int time = Convert.ToInt32(BoxTime.Text) * 60;
 
-                DialogResult DR = (DialogResult)MessageBox.Show("Следующая запись будет изменена. Изменить запись?", "Внимание", (MessageBoxButton)MessageBoxButtons.YesNo);
-                if (DR == DialogResult.Yes)
-                {
-                    Service obj = new Service() { ID = Convert.ToInt32(TextID.Text), Title = BoxTitle.Text, Cost = Convert.ToInt32(BoxCost.Text), DurationInSeconds = time, Description = BoxDescription.Text, Discount = discount, MainImagePath = ForPath.Text };
-                    Classes.Base.Ent.Service.AddOrUpdate(obj);
-                    Classes.Base.Ent.SaveChanges();
-                    MessageBox.Show("Изменения сохранены");
+                    DialogResult DR = (DialogResult)MessageBox.Show("Следующая запись будет изменена. Изменить запись?", "Внимание", (MessageBoxButton)MessageBoxButtons.YesNo);
+                    if (DR == DialogResult.Yes)
+                    {
+                        Service obj = new Service() { ID = Convert.ToInt32(TextID.Text), Title = BoxTitle.Text, Cost = Convert.ToInt32(BoxCost.Text), DurationInSeconds = time, Description = BoxDescription.Text, Discount = discount, MainImagePath = ForPath.Text };
+                        Classes.Base.Ent.Service.AddOrUpdate(obj);
+                        Classes.Base.Ent.SaveChanges();
+                        MessageBox.Show("Изменения сохранены");
+                    }
+                    else if (DR == DialogResult.No)
+                    {
+                        MessageBox.Show("Изменения не были сохранены");
+                    }
                 }
-                else if (DR == DialogResult.No)
-                {
-                    MessageBox.Show("Изменения не были сохранены");
-                }
+                
             }
             catch
             {
@@ -303,11 +311,11 @@ namespace LanguageSchool.Pages
                 {
                     MessageBox.Show("Данное имя уже существует в системе");
                 }
-                if (Convert.ToInt32(BoxNewTime.Text) > 14400 || Convert.ToInt32(BoxNewTime.Text) < 0)
+                if (Convert.ToInt32(BoxNewTime.Text) > 240 || Convert.ToInt32(BoxNewTime.Text) < 0)
                 {
                     MessageBox.Show("Время не может привышать 4 часов или быть отрицательным");
                 }
-                else if (Convert.ToInt32(BoxNewTime.Text) < 14400 || Convert.ToInt32(BoxNewTime.Text) > 0)
+                else if (Convert.ToInt32(BoxNewTime.Text) < 240 && Convert.ToInt32(BoxNewTime.Text) > 0)
                 {
                     double discount = Convert.ToDouble(BoxNewDiscount.Text) / 100;
                     int time = Convert.ToInt32(BoxNewTime.Text) * 60;
@@ -362,10 +370,11 @@ namespace LanguageSchool.Pages
             Service S = ServiceList[ind];
 
             BlockServiceName.Text = "Название курса: " + Convert.ToString(S.Title);
-            BlockServiceTime.Text = "Время занятий: " + Convert.ToString((S.DurationInSeconds) / 60) + "мин";
+            BlockServiceTime.Text =  Convert.ToString((S.DurationInSeconds) / 60);
         }
 
         DateTime DT;
+
         private void TimeOfNote_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
@@ -381,10 +390,16 @@ namespace LanguageSchool.Pages
                     DT = DT.Add(TS);
                     if (DT > DateTime.Now)
                     {
-                        MessageBox.Show(DT + "");
+                        //MessageBox.Show(DT + "");
+                        EndTimeHeader.Visibility = Visibility.Visible;
+                        TimeBetween.Visibility = Visibility.Visible;
+                        int min = Convert.ToInt32(BlockServiceTime.Text);
+                        TimeBetween.Text = DT.AddMinutes(min) + " ";
                     }
                     else
                     {
+                        EndTimeHeader.Visibility = Visibility.Collapsed;
+                        TimeBetween.Visibility = Visibility.Collapsed;
                         MessageBox.Show("Запись не может быть в прошедешм времени");
                         BtnNote.IsEnabled = false;
                     }
@@ -393,8 +408,15 @@ namespace LanguageSchool.Pages
                 {
                     if (TimeOfNote.Text.Length >= 5)
                     {
+                        EndTimeHeader.Visibility = Visibility.Collapsed;
+                        TimeBetween.Visibility = Visibility.Collapsed;
                         MessageBox.Show("Время указано неверно");
                         BtnNote.IsEnabled = false;
+                    }
+                    if (TimeOfNote.Text == "")
+                    {
+                        EndTimeHeader.Visibility = Visibility.Collapsed;
+                        TimeBetween.Visibility = Visibility.Collapsed;
                     }
                 }
             }
@@ -528,11 +550,17 @@ namespace LanguageSchool.Pages
                 {
                     ServiceList = ServiceList1;
                     DGServices.ItemsSource = ServiceList;
+
+                    AllNotes.Text = Convert.ToString("Общее количество записей: " + ServiceList1.Count);
+                    FilterNotes.Text = Convert.ToString("Отфильтрованные записи: " + ServiceList.Count);
                 }
                 else
                 {
                     ServiceList = ServiceListFilter;
                     DGServices.ItemsSource = ServiceList;
+
+                    AllNotes.Text = Convert.ToString("Общее количество записей: " + ServiceList1.Count);
+                    FilterNotes.Text = Convert.ToString("Отфильтрованные записи: " + ServiceList.Count);
                 }
             }
         }

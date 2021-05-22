@@ -141,6 +141,8 @@
 
             <TextBlock Style="{StaticResource FotTextBlock}">Введите время урока</TextBlock>
             <TextBox Style="{StaticResource ForTextBox}" Name="TimeOfNote" TextChanged="TimeOfNote_TextChanged"></TextBox>
+            <TextBlock Style="{StaticResource FotTextBlock}" Visibility="Collapsed" Name="EndTimeHeader">Время окончания урока</TextBlock>
+            <TextBlock Style="{StaticResource FotTextBlock}" Visibility="Collapsed" Name="TimeBetween"></TextBlock>
             <Button Style="{StaticResource Buttons}" Name="BtnNote" Content="Записать" Click="BtnNote_Click"/>
             <Button Style="{StaticResource Buttons}" Name="BtnBack3" Content="Назад" Click="BtnBack3_Click"/>
         </StackPanel>
